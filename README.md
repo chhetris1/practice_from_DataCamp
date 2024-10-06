@@ -95,7 +95,52 @@ country_to_continent_df %>%
                               "China", "United States of America")) +
   labs(x = "% Obese", y = "Country")
 
+#PART 9
+bond_df %>% 
+  # Pivot the data to long format
+  pivot_longer(
+    -Bond, 
+    # Overwrite the names of the two newly created columns
+    names_to = "decade", 
+    values_to = "n_movies", 
+    # Drop na values
+    values_drop_na = TRUE, 
+    # Transform the decade column data type to integer
+    names_transform = list(decade = as.integer)
+  ) %>% 
+  ggplot(aes(x = decade + 5, y = n_movies, fill = Bond))+
+  geom_col()
 
-  
+  #PART 10
+  bird_df %>%
+  # Pivot the data to create a 2 column data frame
+  pivot_longer(
+    starts_with("points_"),
+    names_to = "points",
+    names_prefix = "points_",
+    names_transform = list(points = as.integer),
+    values_to = "species",
+    values_drop_na = TRUE
+  ) %>%
+  group_by(species) %>% 
+  summarize(total_points = sum(points)) %>% 
+  slice_max(total_points, n = 5)
+
+  #PART 11
+  stock_df %>% 
+  # Pivot the data to create 3 new columns: year, week, price
+  pivot_longer(
+    -company,
+    names_to = c("year", "week"),
+    values_to = "price",
+    names_sep = "_week",
+    names_transform = list(
+      year = as.integer,
+      week = as.integer)
+  ) %>%
+  # Create a line plot with price per week, color by company
+  ggplot(aes(x = week, y = price, color = company)) +
+  geom_line() +
+  facet_grid(. ~ year)
   
   
