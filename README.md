@@ -143,4 +143,17 @@ bond_df %>%
   geom_line() +
   facet_grid(. ~ year)
   
+  #PART 12
+  who_df %>% 
+  # Put each variable in its own column
+  pivot_longer(
+    -country,
+    names_to = c("year", "sex", ".value"),
+    names_sep = "_", 
+    names_transform = list("year" = as.integer)
+  ) %>%
+  # Create a plot with life expectancy over obesity
+  ggplot(aes(pct.obese, life.exp, color = sex))+
+  geom_point()
+
   
